@@ -1,0 +1,215 @@
+package a;
+
+import java.util.Stack;
+
+public class LinkedList {
+	private Node head;
+	
+	public void add(String data){
+		Node current = new Node(data);
+		if (head==null) {
+			head = current;
+		}else{
+			current.setNext(head);
+			head = current;
+			
+		}
+	}
+	
+	public void dispaly(){
+		Node current = head;
+		while(current!=null){
+			System.out.print(current.getData()+" ");
+			current = current.getNext();
+		}
+		
+	}
+	
+	public Node find(String data){
+		while(head.getData()!=data){
+			if (head.getNext()==null) {
+				return null;
+			}
+			head = head.getNext();
+		}
+		return head;
+	}
+	
+	public void delete(String data){
+		Node current = head;
+		Node ago  = null;
+		while(current.getData()!=data){
+			if (current.getNext()==null) {
+				return;
+			}
+			ago = current;
+			current = current.getNext();
+		}
+		ago.setNext(current.getNext());
+		
+	}
+	public void insert(String data,int pro){
+		if (pro==0) {
+			add(data);
+		}
+		else{
+			Node current = head;
+			for (int i = 0; i < pro-1; i++) {
+				current = current.getNext();
+			}
+			Node node = new Node(data);
+		
+			node.setNext(current.getNext());
+			current.setNext(node);
+		}
+		
+	}
+	
+	public int getLinkLength(){
+		int len  = 0;
+		while(head!=null){
+			head = head.getNext();
+			len++;
+		}
+		
+		return len;
+	}
+	public Node reverse(){
+		Node pre = null;
+		Node next;
+		
+		while(head!=null){
+			next = head.getNext();
+			head.setNext(pre);
+			pre = head;
+			head = next;
+		}
+		return pre;
+	}
+	public Node reverse1(Node head){
+		if (head==null||head.getNext()==null) {
+			return head;
+		}else{
+			Node last = reverse1(head.getNext());
+			head.getNext().setNext(head);
+			head.setNext(null);
+			return last;
+		}
+		
+	}
+	 //查找单链表的中间结点   
+	public Node getMiddleNode(){
+		if (head==null||head.getNext()==null) {
+			return head;
+		}
+		Node target = head;
+		Node temp = head;
+		while(temp!=null&&temp.getNext()!=null){
+			target = target.getNext();
+			temp = temp.getNext().getNext();
+		}
+		return target;
+		
+		
+	}
+	 //从尾到头打印单链表,递归  
+	public void reversePrintRec(Node head){
+		if (head==null) {
+			return;
+		}else {
+			reversePrintRec(head.getNext());
+			System.out.print(head.getData()+" ");
+		}
+		
+	}
+	//从尾到头打印单链表,栈  
+	public void reversePrintStack(){
+		Stack<Node> stack = new Stack<Node>();
+		while(head!=null){
+			stack.push(head);
+			head = head.getNext();
+		}
+		
+		while(!stack.isEmpty()){
+			System.out.print(stack.pop().getData()+" ");
+		}
+		
+	}
+	
+	//删除倒数第K个节点
+	public Node deleteK(int k){
+		Node p = head;
+		Node q = head;
+		int i;
+		if (head==null||k==0) {
+			return null;
+		}
+		for ( i = 0; i <k-1; i++) {
+			if (p.getNext()!=null) {
+				p = p.getNext();
+			}else{
+				System.out.println("Error K");
+				return null;
+			}
+		}
+		
+		while(p.getNext()!=null){
+			p = p.getNext();
+			q = q.getNext();
+		}
+		return q;
+	}
+	public void deleteNode(Node delete){
+		if (delete==null) {
+			return;
+		}
+		if (delete.getNext()==null) {
+			if (delete==head) {
+				head = null;
+			}
+			else {
+				Node temp = head;
+				while(temp.getNext()!=delete){
+					temp =temp.getNext();
+				}
+				temp.setNext(null);
+			}
+		}
+		else{
+			//先保存数据
+			delete.setData(delete.getNext().getData());
+			delete.setNext(delete.getNext().getNext()); 
+		}
+		return;
+	}
+	public static void main(String[] args) {
+		LinkedList list = new LinkedList();
+		list.add("A");
+		list.add("B");
+		list.add("C");
+		list.add("D");
+		list.add("E");
+		list.dispaly();
+		System.out.println("");
+		/*Node node = list.head;
+		Node head = list.reverse1(node);
+		while(head!=null){
+			System.out.print(head.getData()+" ");
+			head = head.getNext();
+		}*/
+		
+		//list.dispaly();
+		//System.out.println("");
+		//System.out.println(list.getLinkLength());
+		//System.out.println(list.getMiddleNode().getData());
+		//System.out.println(" ");
+		//Node node = list.head;
+		//list.reversePrintRec(node);
+		//System.out.println("");
+		//list.reversePrintStack();
+		
+		//System.out.println(list.head.getData());
+		System.out.println(list.deleteK(2).getData());
+		list.dispaly();
+	}
+}
