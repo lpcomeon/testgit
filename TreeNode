@@ -1,0 +1,24 @@
+package a;
+
+public class TreeNode {
+	
+	public    int key;  
+	public    TreeNode leftChild;  
+	public   TreeNode rightChild;  
+     public TreeNode(int key) {  
+         this.key = key;  
+     }  
+
+     public int getKey() {  
+         return key;  
+     }  
+
+     public String toString() {  
+         String leftkey = (leftChild == null ? "" : String  
+                 .valueOf(leftChild.key));  
+         String rightkey = (rightChild == null ? "" : String  
+                 .valueOf(rightChild.key));  
+         return "(" + leftkey + " , " + key + " , " + rightkey + ")";  
+     }  
+
+}
