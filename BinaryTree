@@ -1,0 +1,206 @@
+package a;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+public class BinaryTree {
+
+	private TreeNode root;
+	public  void insert(int key){
+		TreeNode node = new TreeNode(key);
+		if (root == null) { // 如果根结点为空，则根节点指向新节点  
+            root = node; 
+		}else{
+			TreeNode currentNode = root;
+			TreeNode parentNode ;
+			 while (true) { // 寻找节点添加的位置  
+	                parentNode = currentNode;  
+	                if (key < currentNode.key) {  
+	                    currentNode = currentNode.leftChild;  
+	                    if (currentNode == null) { // 当找到空节点的时候，父节点的左节点指向新节点  
+	                        parentNode.leftChild = node;  
+	                        return;  
+	                    }  
+	                } else {  
+	                    currentNode = currentNode.rightChild;  
+	                    if (currentNode == null) { // 当找到空节点的时候，父节点的右节点指向新节点  
+	                        parentNode.rightChild = node;  
+	                        return;  
+	                    }  
+	                }  
+			 }
+		}
+	}
+	//前序遍历  递归
+	public void preOrderTraverse(TreeNode root) {  
+        if (root != null) {  
+        	
+            System.out.print(root.key + ",");  
+            preOrderTraverse(root.leftChild);  
+            preOrderTraverse(root.rightChild);  
+        }  
+    }  
+	//前序遍历  非递归
+	 public  void preOrderNonrecur(TreeNode root){
+		 if (root==null) {
+			return;
+		}
+		 TreeNode p = root;
+		 Stack<TreeNode> stack = new Stack<TreeNode>();
+		 stack.push(p);
+		 while(!stack.isEmpty()){
+			 p = stack.pop();
+			 System.out.print(p.key+",");
+			 
+			 if (p.rightChild!=null) {
+				stack.push(p.rightChild);
+			}
+			 if (p.leftChild!=null) {
+				stack.push(p.leftChild);
+			}
+		 }
+	 }
+	 //中序遍历  递归
+	 public  void inOrderTraverse(TreeNode root){
+		 if (root != null) {  
+			 	inOrderTraverse(root.leftChild);  
+	            System.out.print(root.key + ",");  
+	            inOrderTraverse(root.rightChild);  
+	        }  
+	 }
+	 //中序遍历（非递归）:
+	 public  void inOrderNonrecur(TreeNode root){
+		 if (root==null) {
+			return;
+		}
+		 Stack<TreeNode> stack = new Stack<TreeNode>();
+		 TreeNode current = root;
+		 while(current!=null||!stack.isEmpty()){
+			 while (current!=null) {
+				stack.push(current);
+				current = current.leftChild;
+			}
+			 if (current==null) {
+				TreeNode node = stack.pop();
+				System.out.print(node.key+",");
+				current = node.rightChild;
+			}
+		 }
+	 }
+	 //后序遍 递归
+	 public  void postOrderTraverse(TreeNode root){
+		if (root!=null) {
+			postOrderTraverse(root.leftChild);
+			postOrderTraverse(root.rightChild);
+			System.out.print(root.key+",");
+		}
+	 }
+	 //后序遍历  非递归
+	 public  void postOrderNonrecur(TreeNode root){
+		 if (root==null) {
+			return;
+		}
+		Stack<TreeNode> stack = new Stack<TreeNode>();
+		TreeNode current = root;
+		while(current!=null||!stack.isEmpty()){
+			
+			while(current!=null){
+				if (current.rightChild!=null) {
+					stack.push(current.rightChild);
+				}
+				stack.push(current);
+				current = current.leftChild;
+			}
+			current = stack.pop();
+			if (current!=null&&!stack.isEmpty()&&stack.peek()==current.rightChild) {
+				stack.pop();
+				stack.push(current);
+				current = current.rightChild;
+			}
+			else{
+				System.out.print(current.key+",");
+				current = null;
+			}
+		}
+		 
+	 }
+	 public int height(TreeNode root){
+	        if(root==null){
+	            return -1;
+	        }
+	        else{
+	            return Math.max(height(root.leftChild),height(root.rightChild))+1;
+	        }
+	    }
+	 //层序遍历（递归）
+	 public void printGivenLevel(TreeNode root, int level, List<Integer> list){
+	        if(root==null){
+	            return;
+	        }   
+	        if(level == 0){
+	            list.add(root.key);
+	        }
+	        else{
+	            printGivenLevel(root.leftChild, level-1, list);
+	            printGivenLevel(root.rightChild, level-1, list);
+	        }
+	    }
+	 public List<Integer> levelOrder(TreeNode rootnode) {
+	        List<Integer> resultlist = new ArrayList<Integer>();
+
+	        for(int level = 0; level<= height(rootnode);level++)
+	        {
+	            List<Integer> list = new ArrayList<Integer>();
+	            printGivenLevel(rootnode,level,list);
+	            resultlist.addAll(list);
+	        }
+	        return resultlist;
+	    }
+	 //层次遍历  非递归
+	 public  void LevelOrderNonRecur(TreeNode root){
+	        TreeNode tempnode = root; 
+	        ArrayDeque<TreeNode> queue=new ArrayDeque<TreeNode>();
+
+	        if(root==null){
+	            return;
+	        }   
+	        queue.add(tempnode);
+	        while(queue.isEmpty()!=true){
+	            tempnode = queue.remove();
+	            System.out.print(tempnode.key+",");
+	            if(tempnode.leftChild!=null)
+	                queue.add(tempnode.leftChild);
+	            if(tempnode.rightChild!=null)
+	                queue.add(tempnode.rightChild);
+	        }       
+	    }
+	public static void main(String[] args) {
+		BinaryTree tree = new BinaryTree();
+		tree.insert(10);
+		tree.insert(6);
+		tree.insert(14);
+		tree.insert(4);
+		tree.insert(8);
+		tree.insert(12);
+		tree.insert(16);
+		tree.preOrderTraverse(tree.root);
+		System.out.println("");
+		tree.preOrderNonrecur(tree.root);
+		System.out.println("");
+		tree.inOrderTraverse(tree.root);
+		System.out.println("");
+		tree.inOrderNonrecur(tree.root);
+		System.out.println("");
+		tree.postOrderTraverse(tree.root);
+		System.out.println("");
+		tree.postOrderNonrecur(tree.root);
+		System.out.println("");
+		//System.out.println(tree.height(tree.root));
+		System.out.println("");
+		tree.levelOrder(tree.root);
+		System.out.println("");
+		tree.LevelOrderNonRecur(tree.root);
+	}
+}
