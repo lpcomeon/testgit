@@ -1,0 +1,45 @@
+package a;
+
+public class LinkedList1 {
+			class Node{
+				private Object obj;
+				private Node next = null;
+				public Node(Object obj) {
+					this.obj = obj;
+				}
+			}
+			
+			private Node head = null;
+			
+			public void insertFist(Object obj){
+				
+				Node node = new Node(obj);
+				if (head==null) {
+					head  = node;
+				}else{
+					node.next = head;
+					head = node;
+				}
+			}
+			
+			public Object deleteFisrt(){
+				if (head==null) {
+					return null;
+				}
+				Node temp = head;
+				head = temp.next;
+				return temp.obj;
+			}
+			
+			public void display(){
+				 if(head == null)  
+			            System.out.println("empty");  
+				 System.out.print("top -> bottom : | ");  
+				 Node cur = head;
+				 while(cur!=null){
+					 System.out.print(cur.obj.toString()+"|");
+					 cur = cur.next;
+				 }
+				 System.out.println("");
+			}
+}
