@@ -1,0 +1,307 @@
+package huawei;
+
+import java.util.Arrays;
+
+public class 排序 {
+	
+	public static void main(String[] args) {
+		int a[] = {22,75,51,92,676,32,833,15,48};
+		//shellsrot(a);
+		//quicksort(a, 0, a.length-1);
+		//int temp[] = new int[a.length];
+		//mergesort(a, 0, 5, temp);
+		//bucketsort(a, 1, 10);
+		//binerysort(a);
+		basesort(a, 10, 4);
+		for (int i = 0; i < a.length; i++) {
+			System.out.print(a[i]+" ");
+		}
+		/*堆排序
+		 * for (int i = 0; i < a.length-1; i++) {
+			//建堆
+			buildMaxHeap(a, a.length-1-i);
+			//交换
+			swap(a,0,a.length-1-i); 
+			System.out.println(Arrays.toString(a));  
+		}*/
+	}
+	
+	public static void swap(int data[],int i,int j){
+	   	 int temp = data[i];
+	   	 data[i] = data[j];
+	   	 data[j] = temp;
+	    }
+	//冒泡排序 
+	//交换相邻两个数 变成大数在后 小数在前。 稳定排序  时间复杂度O(n2)
+	public static void bubblesort1(int a[]){
+		
+		for (int i = 0; i < a.length; i++) {
+			for (int j = 1; j < a.length-i; j++) {
+				if (a[j-1]>a[j]) {
+					swap(a, j-1, j);
+				}
+			}
+		}
+		
+	}
+	//设置标志位 flag  如果已经排序好  flag = flase  则不再继续排序
+	public static void bubblesort2(int a[]){
+		int j,k;
+		boolean flag = true;
+		k = a.length;
+		while(flag){
+			flag = false;
+			for ( j = 1; j < k; j++) {
+				if (a[j-1]>a[j]) {
+					swap(a, j-1, j);
+					flag = true;
+				}
+			}
+			k--;
+		}
+	}
+	//若后面已经排好序 则下次排序从开始到已经排好序的位置
+	public static void bubblesort3(int a[]){
+		int j,k;
+		int flag = a.length;
+		while(flag>0){
+			k = flag;
+			flag = 0;
+			for ( j = 1; j < k; j++) {
+				if (a[j-1]>a[j]) {
+					swap(a, j-1, j);
+					flag = j;
+				}
+			}
+		}
+	}
+	//直接选择排序  找最小元素
+	//数组分成有序区和无序区，初始时整个数组都是无序区，然后每次从无序区选一个最小的元素直接放到有序区的最后，直到整个数组变有序区。不稳定 排序 O(n2)
+	public static void selectsort1(int a[]){
+				int i,j,nMinIndex;
+				for ( i = 0; i < a.length; i++) 
+				{
+					nMinIndex = i;//找最小元素位置
+					for ( j = i+1; j < a.length; j++) {
+						if (a[j]<a[nMinIndex]) {
+							nMinIndex = j;
+						}
+					}
+					swap(a, nMinIndex, i);
+				}
+			}
+	//直接插入排序
+	//每次将一个待排序的数据，插入到前面已经排好序的序列之中，直到全部数据插入完成。 稳定排序 时间复杂度 O(n2)
+	public static void insertsort1(int a[]){
+		int i,j;
+		for ( i = 1; i < a.length; i++) 
+		{
+			if (a[i-1]>a[i])
+			{
+				int temp = a[i];
+				for ( j = i-1; j>=0&&temp<a[j]; j--) 
+				{
+					a[j+1] = a[j];
+				}
+				
+				a[j+1]  =temp;
+			}
+		}
+	}
+		
+			//希尔排序    加强版的直接插入排序  //不稳定  O(nlogn)
+			//先将整个待排元素序列分割成若干个子序列（由相隔某个“增量”的元素组成的）分别进行直接插入排序，然后依次缩减增量再进行排序，待整个序列中的元素基本有序（增量足够小）时，再对全体元素进行一次直接插入排序。由于希尔排序是对相隔若干距离的数据进行直接插入排序，因此可以形象的称希尔排序为“跳着插”
+				public static void shellsrot(int a[]){
+					int j,grap;
+					int n = a.length;
+					for (grap =n/2 ; grap>0; grap/=2) 
+					{
+						for ( j = grap; j < n; j++) {//从数组的第grap元素开始
+							if (a[j]<a[j-grap]) 
+							{//每个元素与自己组内的元素进行直接插入排序
+								int temp = a[j];
+								int k;
+								//int k = j-grap;
+								/*while(k>=0&&a[k]>temp)
+								{
+									a[k+grap] = a[k];
+									k -= grap;
+								}*/
+								for ( k = j-grap; k>=0&&a[k]>temp; k-=grap) {
+									a[k+grap] = a[k];
+								}
+								a[k+grap] = temp;
+							}
+						}
+					}
+				}
+				
+		//归并排序 N*logN 稳定排序
+		//先递归的分解数列，再合并数列就完成了归并排序。
+				
+		//将有二个有序数列a[first...mid]和a[mid...last]合并。		
+		public static void mergearray(int a[],int first,int mid,int last,int temp[]){
+			int i = first,j = mid+1;
+			int m = mid, n = last;
+			int k = 0;
+			
+			while(i<=m && j<=n){
+				if (a[i]<a[j]) {
+					temp[k++] = a[i++];
+				}
+				else{
+					temp[k++] = a[j++];
+				}
+			}
+			while(i<=m){
+				temp[k++] = a[i++];
+			}
+			while(j<=n)
+			{
+				temp[k++] = a[j++];
+			}
+			
+			for (i = 0; i< k; i++) {
+				a[i+first] = temp[i];
+			}
+		}
+		public static void mergesort(int a[],int first,int last,int temp[]){
+			if (first<last) {
+				int mid = (first+last)/2;
+				mergesort(a, first, mid, temp);
+				mergesort(a, mid+1, last, temp);
+				mergearray(a, first, mid, last, temp);
+			}
+		}
+	
+		//快速排序 不稳定  O(nlogn)
+		// 挖坑填数+分治法   从右边开始找比他小的， 从左边找比他大的    这样i之前的数都比基准数小，i之后的数都比基准数大 重复此步骤
+		public static void quicksort(int a[],int left,int right ){
+			if (left<right)
+			{
+			int i = left,j = right ,temp = a[left];
+			while(i<j){
+				
+				while(i<j&&a[j]>=temp)
+					j--;
+				while(i<j&&a[i]<=temp)
+					i++;
+				if (i<j) {
+					swap(a, i, j);
+				}
+				
+			}
+			a[left] = a[i];
+			a[i] = temp;
+			quicksort(a, left, i-1);
+			quicksort(a, i+1, right);
+			
+			}
+		}
+		
+		//堆排序  不稳定  O(nlogn)
+		//对data数组从0到lastIndex建大顶堆
+		 public static void buildMaxHeap(int[] data, int lastIndex){
+			//从最后一个子节点的父节点开始比较这个父节点是否大于它的子节点
+			 for (int i = (lastIndex-1)/2; i>=0; i--) {
+				//保存正在比较的子节点
+				 int k  = i;
+				 //保证此节点存在
+				 while(2*k+1<=lastIndex) {
+					//保存当前子节点的左子节点
+					 int biggerIndex = 2*k+1;
+					//如果biggerIndex小于lastIndex 说明当前子节点还有右子节点
+					 if (biggerIndex<lastIndex) {
+						//保证右子节点的值大于左子节点  biggerIndex保存最大子节点的索引
+						 if (data[biggerIndex]<data[biggerIndex+1]) {
+							biggerIndex++;
+						}
+					}
+					 if (data[k]<data[biggerIndex]) {
+						//交换该节点与该子节点的位置
+						 swap(data, k, biggerIndex);
+						//将k赋给biggestIndex 重新while循环 保证该节点大于其子节点的值
+						 biggerIndex = k;
+					}else {
+						break;
+					}
+				}
+			}
+			 
+		 }
+		//桶排序 (计数排序) 稳定排序  时间复杂度最好O(n)(当n=m 及每个桶中只有一个数据) 平均时间复杂度 为O(N*logN) , 空间复杂度O(n+m)
+		//准备缓存数组  大小为原数据的区间大小  ，将原数据依次放入桶中  排序即成功
+		public static void bucketsort(int a[],int min,int max){
+			//缓存数组 大小为 a.length
+			int temp[] = new int [a.length];
+			//桶数组  大小为区间长度
+			int bucket[] = new int[max-min];
+			//计算a[]落入桶中的数量
+			for (int i = 0; i < a.length; i++) {
+				bucket[a[i]-min]++;
+			}
+			//为桶进行顺序赋值
+			for (int i = 1; i < bucket.length; i++) {
+				bucket[i] = bucket[i]+bucket[i-1];
+			}
+			//复制数组
+			System.arraycopy(a, 0, temp, 0, a.length);
+			//将缓存中的数组 按照桶中的数据 排序放到a[]
+			for (int k = temp.length-1; k>=0; k--) {
+				 a[--bucket[temp[k]-min]]  =temp[k];
+			}
+			
+		} 
+		//二分法 插入排序  稳定 O(n2) 
+		public static void binerysort(int a[]){
+			for (int i = 0; i < a.length; i++) {
+				int temp = a[i];
+				int left = 0;
+				int rigth = i-1;
+				int mid = 0;
+				
+				while(left<=rigth){
+					mid = (left+rigth)/2;
+					if (temp<a[mid]) {
+						rigth = mid-1;
+					}else{
+						left = mid+1;
+					}
+				}
+				for (int j = i-1; j>=left; j--) {
+					a[j+1] = a[j];
+				}
+				 a[left] = temp;
+				
+			}
+		}
+		//基数排序
+		//从最低位开始比较   依次放入桶中  进行排序
+		public static void basesort(int a[],int radix,int d){
+			int temp[] = new int[a.length];
+			int bucket[] = new int[radix];
+			
+			for (int i = 0,rate =1; i < d; i++) {
+				//初始化桶数组
+				Arrays.fill(bucket, 0);
+				//复制数组到temp[]
+				System.arraycopy(a, 0, temp, 0, a.length);
+				//计数，，，在桶中a[]数据的个数
+				for (int j = 0; j < a.length; j++) {
+					int subKey = (temp[j]/rate)%radix;
+					bucket[subKey]++;
+				}
+				//给桶中顺序排序并赋值
+				for (int j = 1; j < bucket.length; j++) {
+					bucket[j] = bucket[j]+bucket[j-1];
+				}
+				// 按子关键字对指定的数据进行排序  
+				for (int m = temp.length-1; m>=0; m--) {
+					int subKey = (temp[m]/rate)%radix;
+					a[--bucket[subKey]] = temp[m];
+				}
+				rate *= radix;
+			}
+			
+		}
+}
